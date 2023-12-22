@@ -6,17 +6,14 @@ extension Double {
     }
 }
 
-struct TransactionCategory: Hashable, Codable {
-    let total: Double
+struct TransactionsResponse: Codable {
+    let status: String
+    let message: String
+    let transactions: [Transaction]
 }
 
 struct TransactionResponse: Codable {
-    let message: String
-    let transactions: [String: TransactionCategory]
-}
-
-struct TransactionsResponse: Codable {
-    let status: Int
+    let status: String
     let message: String
     let transaction: Transaction
 }
@@ -161,8 +158,8 @@ struct TransactionFormView: View {
 }
 
 class ViewModel: ObservableObject {
-    @Published var expenseResponse: TransactionResponse?
-    @Published var incomeResponse: TransactionResponse?
+    @Published var expenseResponse: [Transaction]?
+    @Published var incomeResponse: [Transaction]?
     @Published var withdrawResponse: WithdrawResponse?
     @Published var userBanks: [UserBank] = []
     @Published var userId: String = "6584851c1998d9f468e442fc"
@@ -196,11 +193,13 @@ class ViewModel: ObservableObject {
             if let data = data {
                 do {
                     let decoder = JSONDecoder()
-                    let responseData = try decoder.decode(TransactionsResponse.self, from: data)
+                    let responseData = try decoder.decode(TransactionResponse.self, from: data)
                     
-                    print("Mensagem: \(responseData.status)")
-                    print("Nome da Transação: \(responseData.message)")
-                    
+                    if responseData.status != "success" {
+                        print("Erro na solicitação POST: \(responseData.message)")
+                        completion(false)
+                        return
+                    }
                     completion(true)
                 } catch {
                     print("Erro ao decodificar JSON: \(error)")
@@ -241,42 +240,59 @@ class ViewModel: ObservableObject {
         }
         task.resume()
     }
-    func fetchExpenses() {
-        fetchData(urlString: "http://localhost:3008/finances/user_expenses")
-    }
-
-    func fetchIncomes() {
-        fetchData(urlString: "http://localhost:3008/finances/user_incomes")
-    }
-
-    func fetchWithdraw() {
-        guard let url = URL(string: "http://localhost:3008/finances/user_withdraw?userId=\(self.userId)") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
-            guard let data = data, error == nil else {
-                print("Erro na requisição: \(error?.localizedDescription ?? "Erro desconhecido")")
-                return
-            }
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("JSON decodificado (Withdraw):", jsonString)
-            }
-            do {
-                let withdrawResponse = try JSONDecoder().decode(WithdrawResponse.self, from: data)
-                DispatchQueue.main.async {
-                    self?.withdrawResponse = withdrawResponse
-                }
-            } catch {
-                print("Erro ao decodificar JSON (Withdraw): \(error)")
+    func fetchExpenses(month: Int? = nil, year: Int? = nil, limit: Int? = nil) {
+        var queryString = "user_expenses?userId=\(self.userId)"
+        
+        if let month = month, let year = year {
+            queryString += "&month=\(month)&year=\(year)"
+        }
+        
+        if let limit = limit {
+            queryString += "&limit=\(limit)"
+        }
+        
+        fetchData(endpoint: queryString) { [weak self] (response: TransactionsResponse) in
+            DispatchQueue.main.async {
+                self?.expenseResponse = response.transactions
             }
         }
-        task.resume()
     }
 
-    private func fetchData(urlString: String) {
-        guard let url = URL(string: "\(urlString)?userId=\(self.userId)") else { return }
+    func fetchIncomes(month: Int? = nil, year: Int? = nil, limit: Int? = nil) {
+        var queryString = "user_incomes?userId=\(self.userId)"
+        
+        if let month = month, let year = year {
+            queryString += "&month=\(month)&year=\(year)"
+        }
+        
+        if let limit = limit {
+            queryString += "&limit=\(limit)"
+        }
+        
+        fetchData(endpoint: queryString) { [weak self] (response: TransactionsResponse) in
+            DispatchQueue.main.async {
+                self?.incomeResponse = response.transactions
+            }
+        }
+    }
+
+    func fetchWithdraw(month: Int? = nil, year: Int? = nil) {
+        var queryString = "user_withdraw?userId=\(self.userId)"
+        
+        if let month = month, let year = year {
+            queryString += "&month=\(month)&year=\(year)"
+        }
+        
+        fetchData(endpoint: queryString) { [weak self] (response: WithdrawResponse) in
+            DispatchQueue.main.async {
+                self?.withdrawResponse = response
+            }
+        }
+    }
+
+    private func fetchData<T: Decodable>(endpoint: String, completion: @escaping (T) -> Void) {
+        guard let url = URL(string: "http://localhost:3008/finances/\(endpoint)") else { return }
+        print(url)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -286,18 +302,10 @@ class ViewModel: ObservableObject {
                 print("Erro na requisição: \(error?.localizedDescription ?? "Erro desconhecido")")
                 return
             }
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("JSON decodificado:", jsonString)
-            }
+
             do {
-                let transactionResponse = try JSONDecoder().decode(TransactionResponse.self, from: data)
-                DispatchQueue.main.async {
-                    if urlString.contains("user_expenses") {
-                        self?.expenseResponse = transactionResponse
-                    } else if urlString.contains("user_incomes") {
-                        self?.incomeResponse = transactionResponse
-                    }
-                }
+                let responseObject = try JSONDecoder().decode(T.self, from: data)
+                completion(responseObject)
             } catch {
                 print("Erro ao decodificar JSON: \(error)")
             }
@@ -308,7 +316,15 @@ class ViewModel: ObservableObject {
 
 struct ContentView: View {
     @StateObject var viewModel = ViewModel()
-
+    @State private var month: Int
+    @State private var year: Int
+    @State private var limit = 5
+    init() {
+        // Inicialize com o mês e ano atuais
+        let currentDate = Date()
+        self._month = State(initialValue: Calendar.current.component(.month, from: currentDate))
+        self._year = State(initialValue: Calendar.current.component(.year, from: currentDate))
+    }
     var body: some View {
         NavigationView {
             TabView {
@@ -329,6 +345,13 @@ struct ContentView: View {
                     VStack {
                         HStack {
                             Button(action: {
+                                // Lógica para diminuir o mês
+                                if month == 1 {
+                                    month = 12
+                                    year -= 1
+                                } else {
+                                    month -= 1
+                                }
                             }) {
                                 Image(systemName: "chevron.left.circle.fill")
                                     .resizable()
@@ -342,6 +365,12 @@ struct ContentView: View {
                                 .lineLimit(1)
                                 .frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             Button(action: {
+                                if month == 12 {
+                                    month = 1
+                                    year += 1
+                                } else {
+                                    month += 1
+                                }
                             }) {
                                 Image(systemName: "chevron.right.circle.fill")
                                     .resizable()
@@ -385,15 +414,13 @@ struct ContentView: View {
                                     .padding(.bottom, 5)
 
                                 List {
-                                    ForEach(viewModel.expenseResponse?.transactions.keys.sorted() ?? [], id: \.self) { category in
-                                        if let transaction = viewModel.expenseResponse?.transactions[category] {
+                                    ForEach(viewModel.expenseResponse ?? [], id: \.self) { transaction in
                                             VStack(alignment: .leading) {
-                                                Text(category)
+                                                Text(transaction.name)
                                                     .font(.headline)
-                                                Text("Total: \(transaction.total.formatted())")
+                                                Text("Valor: \(transaction.value.formatted())")
                                                     .foregroundColor(.gray)
                                             }
-                                        }
                                     }
                                 }
                                 .listStyle(PlainListStyle())
@@ -406,15 +433,13 @@ struct ContentView: View {
                                     .padding(.bottom, 5)
 
                                 List {
-                                    ForEach(viewModel.incomeResponse?.transactions.keys.sorted() ?? [], id: \.self) { category in
-                                        if let transaction = viewModel.incomeResponse?.transactions[category] {
+                                    ForEach(viewModel.incomeResponse ?? [], id: \.self) { transaction in
                                             VStack(alignment: .leading) {
-                                                Text(category)
+                                                Text(transaction.name )
                                                     .font(.headline)
-                                                Text("Total: \(transaction.total.formatted())")
+                                                Text("Valor: \(transaction.value.formatted())")
                                                     .foregroundColor(.gray)
                                             }
-                                        }
                                     }
                                 }
                                 .listStyle(PlainListStyle())
@@ -436,7 +461,7 @@ struct ContentView: View {
                                     .cornerRadius(20)
                                     .padding()
                             }
-                            .padding(.top, 200)
+                            .padding(.top, 300)
 
                         }
                     }
@@ -445,9 +470,15 @@ struct ContentView: View {
                 .navigationTitle("")
                 .navigationBarHidden(true)
                 .onAppear {
-                    viewModel.fetchExpenses()
-                    viewModel.fetchIncomes()
-                    viewModel.fetchWithdraw()
+                    viewModel.fetchExpenses(month: month, year: year, limit: limit)
+                    viewModel.fetchIncomes(month: month, year: year, limit: limit)
+                    viewModel.fetchWithdraw(month: month, year: year)
+                }
+                .onChange(of: month) { newMonth in
+                    // Chamado quando o valor de month muda
+                    viewModel.fetchExpenses(month: newMonth, year: year)
+                    viewModel.fetchIncomes(month: newMonth, year: year)
+                    viewModel.fetchWithdraw(month: newMonth, year: year)
                 }
                 .tabItem {
                     Label("Home", systemImage: "house")
