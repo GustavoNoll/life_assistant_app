@@ -113,6 +113,16 @@ struct HomeView: View {
                 Spacer()
                 VStack {
                     Section(header: Text("Últimas Transações").font(.title2)){
+                        Button(action: {
+                            isShowingTransactionForm = true
+                        }) {
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .foregroundColor(.blue)
+                                .background(Color.white)
+                                .frame(width: 30, height:30)
+                                .cornerRadius(10)
+                        }
                         ForEach(viewModel.transactionResponse ?? [], id: \.self){ transaction in
                             ListDesign(name: transaction.name, value: transaction.value, kind: transaction.kind, backgroundColor: (transaction.income ? .green : .red),
                                        rightCorner: transaction.timestamp)
@@ -134,6 +144,9 @@ struct HomeView: View {
                 fetchesPerformed = true
             }
         }
+        .sheet(isPresented: $isShowingTransactionForm) {
+                            TransactionFormView(viewModel: viewModel)
+                        }
 
     }
 }
