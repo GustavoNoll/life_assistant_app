@@ -7,7 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C7B06C972B35DD8A001C9703 /* life_assistant_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B06C962B35DD8A001C9703 /* life_assistant_appApp.swift */; };
+		C73154F02B36FB5100D9E0FF /* Validations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154EF2B36FB5100D9E0FF /* Validations.swift */; };
+		C73154F22B36FB6400D9E0FF /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154F12B36FB6400D9E0FF /* Utils.swift */; };
+		C73154F42B36FB8100D9E0FF /* TransactionFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154F32B36FB8100D9E0FF /* TransactionFormView.swift */; };
+		C73154F62B36FBBE00D9E0FF /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154F52B36FBBE00D9E0FF /* ViewModel.swift */; };
+		C73154F82B36FC1100D9E0FF /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154F72B36FC1100D9E0FF /* Models.swift */; };
+		C73154FA2B36FFD000D9E0FF /* currency_text_field.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154F92B36FFD000D9E0FF /* currency_text_field.swift */; };
+		C73154FC2B3709AB00D9E0FF /* ShipmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154FB2B3709AB00D9E0FF /* ShipmentListView.swift */; };
+		C73154FE2B37283200D9E0FF /* ShipmentFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154FD2B37283200D9E0FF /* ShipmentFormView.swift */; };
+		C73155002B372C3B00D9E0FF /* shipmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73154FF2B372C3B00D9E0FF /* shipmentModel.swift */; };
+		C731550A2B37313600D9E0FF /* ApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73155092B37313600D9E0FF /* ApiRequest.swift */; };
+		C731550D2B373DE300D9E0FF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C731550C2B373DE300D9E0FF /* LoginView.swift */; };
+		C731550F2B373E4F00D9E0FF /* SignAppleId.swift in Sources */ = {isa = PBXBuildFile; fileRef = C731550E2B373E4F00D9E0FF /* SignAppleId.swift */; };
+		C7A037C42B3748530045E1D9 /* LifeAssistantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A037C32B3748530045E1D9 /* LifeAssistantApp.swift */; };
+		C7A037C72B374BC70045E1D9 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A037C62B374BC70045E1D9 /* NetworkConfiguration.swift */; };
 		C7B06C992B35DD8A001C9703 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B06C982B35DD8A001C9703 /* ContentView.swift */; };
 		C7B06C9B2B35DD8C001C9703 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7B06C9A2B35DD8C001C9703 /* Assets.xcassets */; };
 		C7B06C9E2B35DD8C001C9703 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7B06C9D2B35DD8C001C9703 /* Preview Assets.xcassets */; };
@@ -34,8 +47,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C73154EF2B36FB5100D9E0FF /* Validations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validations.swift; sourceTree = "<group>"; };
+		C73154F12B36FB6400D9E0FF /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		C73154F32B36FB8100D9E0FF /* TransactionFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFormView.swift; sourceTree = "<group>"; };
+		C73154F52B36FBBE00D9E0FF /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		C73154F72B36FC1100D9E0FF /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		C73154F92B36FFD000D9E0FF /* currency_text_field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = currency_text_field.swift; sourceTree = "<group>"; };
+		C73154FB2B3709AB00D9E0FF /* ShipmentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipmentListView.swift; sourceTree = "<group>"; };
+		C73154FD2B37283200D9E0FF /* ShipmentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipmentFormView.swift; sourceTree = "<group>"; };
+		C73154FF2B372C3B00D9E0FF /* shipmentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shipmentModel.swift; sourceTree = "<group>"; };
+		C73155092B37313600D9E0FF /* ApiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiRequest.swift; sourceTree = "<group>"; };
+		C731550C2B373DE300D9E0FF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		C731550E2B373E4F00D9E0FF /* SignAppleId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignAppleId.swift; sourceTree = "<group>"; };
+		C7A037C32B3748530045E1D9 /* LifeAssistantApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeAssistantApp.swift; sourceTree = "<group>"; };
+		C7A037C52B3749330045E1D9 /* life-assistant-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "life-assistant-app-Info.plist"; sourceTree = SOURCE_ROOT; };
+		C7A037C62B374BC70045E1D9 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
 		C7B06C932B35DD8A001C9703 /* life_assistant_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = life_assistant_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C7B06C962B35DD8A001C9703 /* life_assistant_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = life_assistant_appApp.swift; sourceTree = "<group>"; };
 		C7B06C982B35DD8A001C9703 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C7B06C9A2B35DD8C001C9703 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C7B06C9D2B35DD8C001C9703 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -71,6 +98,68 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C73155012B372C8900D9E0FF /* viewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C73154FF2B372C3B00D9E0FF /* shipmentModel.swift */,
+				C73154F52B36FBBE00D9E0FF /* ViewModel.swift */,
+			);
+			path = viewModels;
+			sourceTree = "<group>";
+		};
+		C73155022B372CB600D9E0FF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C731550B2B373DD200D9E0FF /* IUsers */,
+				C73155052B372CEE00D9E0FF /* Transactions */,
+				C73155042B372CD800D9E0FF /* Home */,
+				C73155032B372CCE00D9E0FF /* Shipments */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C73155032B372CCE00D9E0FF /* Shipments */ = {
+			isa = PBXGroup;
+			children = (
+				C73154FB2B3709AB00D9E0FF /* ShipmentListView.swift */,
+				C73154FD2B37283200D9E0FF /* ShipmentFormView.swift */,
+			);
+			path = Shipments;
+			sourceTree = "<group>";
+		};
+		C73155042B372CD800D9E0FF /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				C7B06C982B35DD8A001C9703 /* ContentView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		C73155052B372CEE00D9E0FF /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				C73154F32B36FB8100D9E0FF /* TransactionFormView.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		C73155062B37311000D9E0FF /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				C73155092B37313600D9E0FF /* ApiRequest.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		C731550B2B373DD200D9E0FF /* IUsers */ = {
+			isa = PBXGroup;
+			children = (
+				C731550C2B373DE300D9E0FF /* LoginView.swift */,
+				C731550E2B373E4F00D9E0FF /* SignAppleId.swift */,
+			);
+			path = IUsers;
+			sourceTree = "<group>";
+		};
 		C7B06C8A2B35DD8A001C9703 = {
 			isa = PBXGroup;
 			children = (
@@ -94,10 +183,18 @@
 		C7B06C952B35DD8A001C9703 /* life_assistant_app */ = {
 			isa = PBXGroup;
 			children = (
-				C7B06C962B35DD8A001C9703 /* life_assistant_appApp.swift */,
-				C7B06C982B35DD8A001C9703 /* ContentView.swift */,
+				C7A037C52B3749330045E1D9 /* life-assistant-app-Info.plist */,
+				C73155062B37311000D9E0FF /* utils */,
+				C73155022B372CB600D9E0FF /* Views */,
 				C7B06C9A2B35DD8C001C9703 /* Assets.xcassets */,
 				C7B06C9C2B35DD8C001C9703 /* Preview Content */,
+				C73154EF2B36FB5100D9E0FF /* Validations.swift */,
+				C73154F12B36FB6400D9E0FF /* Utils.swift */,
+				C73155012B372C8900D9E0FF /* viewModels */,
+				C73154F72B36FC1100D9E0FF /* Models.swift */,
+				C73154F92B36FFD000D9E0FF /* currency_text_field.swift */,
+				C7A037C32B3748530045E1D9 /* LifeAssistantApp.swift */,
+				C7A037C62B374BC70045E1D9 /* NetworkConfiguration.swift */,
 			);
 			path = life_assistant_app;
 			sourceTree = "<group>";
@@ -257,8 +354,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7A037C42B3748530045E1D9 /* LifeAssistantApp.swift in Sources */,
+				C731550F2B373E4F00D9E0FF /* SignAppleId.swift in Sources */,
+				C73154FE2B37283200D9E0FF /* ShipmentFormView.swift in Sources */,
+				C73154FC2B3709AB00D9E0FF /* ShipmentListView.swift in Sources */,
+				C731550A2B37313600D9E0FF /* ApiRequest.swift in Sources */,
 				C7B06C992B35DD8A001C9703 /* ContentView.swift in Sources */,
-				C7B06C972B35DD8A001C9703 /* life_assistant_appApp.swift in Sources */,
+				C73154F02B36FB5100D9E0FF /* Validations.swift in Sources */,
+				C73154F22B36FB6400D9E0FF /* Utils.swift in Sources */,
+				C73154F62B36FBBE00D9E0FF /* ViewModel.swift in Sources */,
+				C73154F42B36FB8100D9E0FF /* TransactionFormView.swift in Sources */,
+				C73154FA2B36FFD000D9E0FF /* currency_text_field.swift in Sources */,
+				C7A037C72B374BC70045E1D9 /* NetworkConfiguration.swift in Sources */,
+				C731550D2B373DE300D9E0FF /* LoginView.swift in Sources */,
+				C73155002B372C3B00D9E0FF /* shipmentModel.swift in Sources */,
+				C73154F82B36FC1100D9E0FF /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,17 +529,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"life_assistant_app/Preview Content\"";
 				DEVELOPMENT_TEAM = 3JV9SLBP56;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "life-assistant-app-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Life Assistant";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -437,6 +552,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "life-assistant.life-assistant-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -448,17 +564,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"life_assistant_app/Preview Content\"";
 				DEVELOPMENT_TEAM = 3JV9SLBP56;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "life-assistant-app-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Life Assistant";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -466,6 +587,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "life-assistant.life-assistant-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -520,6 +642,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3JV9SLBP56;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "life-assistant.life-assistant-appUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -538,6 +661,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3JV9SLBP56;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "life-assistant.life-assistant-appUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
