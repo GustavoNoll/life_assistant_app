@@ -44,7 +44,7 @@ struct HomeView: View {
     @StateObject var viewModel = ViewModel()
     @State private var month: Int
     @State private var year: Int
-    @State private var limit = 5
+    @State private var limit = 7
     private var dateFormatter = DateFormatter()
     @State private var isShowingTransactionForm = false
     @State private var fetchesPerformed = false
@@ -59,12 +59,12 @@ struct HomeView: View {
     }
 
     var body: some View {
-        VStack {
+        ScrollView {
             ZStack {
-                Color.blue
-                    .ignoresSafeArea()
-
-                VStack {
+                ZStack {
+                    Color.blue
+                        .ignoresSafeArea()
+                    
                     Text("Finanças")
                         .foregroundColor(.white)
                         .font(.largeTitle.bold())
@@ -72,63 +72,33 @@ struct HomeView: View {
                         .padding(.bottom, 8)
                 }
             }
-            .frame(height: 200)
-
+            .frame(height: 250)
+            Spacer()
             VStack {
                 HStack {
-                    Button(action: {
-                        // Lógica para diminuir o mês
-                        if month == 1 {
-                            month = 12
-                            year -= 1
-                        } else {
-                            month -= 1
-                        }
-                    }) {
-                        Image(systemName: "chevron.left.circle.fill")
-                            .resizable()
-                            .foregroundColor(.blue)
-                            .frame(width: 40, height: 40)
-                    }
-
-                    Text("\(viewModel.withdrawResponse?.message ?? "")")
+                    Text("Balanço do mês")
                         .font(.title2.bold())
                         .foregroundColor(.blue)
                         .padding(.bottom, 0)
                         .lineLimit(1)
                         .frame(alignment: .center)
-
-                    Button(action: {
-                        if month == 12 {
-                            month = 1
-                            year += 1
-                        } else {
-                            month += 1
-                        }
-                    }) {
-                        Image(systemName: "chevron.right.circle.fill")
-                            .resizable()
-                            .foregroundColor(.blue)
-                            .frame(width: 40, height: 40)
-                    }
                 }
-
+                Spacer()
                 HStack {
                     Text("Saldo:")
                         .font(.headline)
 
-                    Text("\((viewModel.withdrawResponse?.withdraw ?? 0).formatted())")
+                    Text("\((viewModel.withdrawResponse?.withdraw ?? 0).formatted()) $")
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(viewModel.withdrawResponse?.withdraw ?? 0 >= 0 ? .green : .red)
                 }
                 .padding(.bottom, 5)
-
                 HStack {
                     Text("Despesas:")
                         .font(.subheadline)
 
-                    Text("\((viewModel.withdrawResponse?.expenses ?? 0).formatted())")
+                    Text("\((viewModel.withdrawResponse?.expenses ?? 0).formatted()) $")
                         .font(.headline)
                         .foregroundColor(.red)
                         .padding(.trailing, 20)
@@ -136,72 +106,25 @@ struct HomeView: View {
                     Text("Receitas:")
                         .font(.subheadline)
 
-                    Text("\((viewModel.withdrawResponse?.incomes ?? 0).formatted())")
+                    Text("\((viewModel.withdrawResponse?.incomes ?? 0).formatted()) $")
                         .font(.headline)
                         .foregroundColor(.green)
                 }
-            }
-            .padding()
-
-            ZStack {
-                HStack {
-                    VStack {
-                        Text("Últimas transações")
-                            .font(.headline)
-                            .padding(.bottom, 5)
-
-                        List {
-                            ForEach(viewModel.transactionResponse ?? [], id: \.self) { transaction in
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Text(transaction.name)
-                                            .font(.headline)
-                                        Spacer()
-                                        Text(transaction.timestamp)
-                                    }
-
-                                    HStack {
-                                        Text("Valor:")
-                                            .foregroundColor(.gray)
-
-                                        Text("\(transaction.value.formatted())")
-                                            .foregroundColor(transaction.income ? .green : .red)
-                                    }
-                                }
-                            }
-                            .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10) // Ajuste o valor do raio conforme necessário
-                                        .stroke(Color.gray.opacity(0.5), lineWidth: 1) // Adiciona uma borda cinza com largura de 1 ponto
-                                )                        }
-                        .listStyle(PlainListStyle())
-                    }
-                    .padding()
-                }
-                .sheet(isPresented: $isShowingTransactionForm) {
-                    TransactionFormView(viewModel: viewModel)
-                }
-
+                Spacer()
                 VStack {
-                    Spacer()
-
-                    HStack {
-                        Spacer()
-
-                        Button(action: {
-                            isShowingTransactionForm = true
-                        }) {
-                            Image(systemName: "plus.circle.fill")
-                                .resizable()
-                                .foregroundColor(.blue)
-                                .background(Color.white)
-                                .frame(width: 50, height: 50)
-                                .cornerRadius(20)
-                                .padding()
+                    Section(header: Text("Últimas Transações").font(.title2)){
+                        ForEach(viewModel.transactionResponse ?? [], id: \.self){ transaction in
+                            ListDesign(name: transaction.name, value: transaction.value, kind: transaction.kind, backgroundColor: (transaction.income ? .green : .red),
+                                       rightCorner: transaction.timestamp)
                         }
                     }
                 }
             }
+            
+        }
+        .ignoresSafeArea().onAppear{
+            viewModel.fetchAll(month: month, year: year, limit: limit)
+            //remove
         }
         .navigationTitle("")
         .navigationBarHidden(true)
@@ -211,12 +134,7 @@ struct HomeView: View {
                 fetchesPerformed = true
             }
         }
-        .onChange(of: month) { newMonth in
-            // Chamado quando o valor de month muda
-            viewModel.fetchExpenses(month: newMonth, year: year)
-            viewModel.fetchIncomes(month: newMonth, year: year)
-            viewModel.fetchWithdraw(month: newMonth, year: year)
-        }
+
     }
 }
 

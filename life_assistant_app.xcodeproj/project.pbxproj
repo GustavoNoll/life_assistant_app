@@ -21,6 +21,7 @@
 		C731550F2B373E4F00D9E0FF /* SignAppleId.swift in Sources */ = {isa = PBXBuildFile; fileRef = C731550E2B373E4F00D9E0FF /* SignAppleId.swift */; };
 		C7A037C42B3748530045E1D9 /* LifeAssistantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A037C32B3748530045E1D9 /* LifeAssistantApp.swift */; };
 		C7A037C72B374BC70045E1D9 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A037C62B374BC70045E1D9 /* NetworkConfiguration.swift */; };
+		C7A037C92B377D6C0045E1D9 /* ListDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A037C82B377D6C0045E1D9 /* ListDesign.swift */; };
 		C7B06C992B35DD8A001C9703 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B06C982B35DD8A001C9703 /* ContentView.swift */; };
 		C7B06C9B2B35DD8C001C9703 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7B06C9A2B35DD8C001C9703 /* Assets.xcassets */; };
 		C7B06C9E2B35DD8C001C9703 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7B06C9D2B35DD8C001C9703 /* Preview Assets.xcassets */; };
@@ -62,6 +63,7 @@
 		C7A037C32B3748530045E1D9 /* LifeAssistantApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeAssistantApp.swift; sourceTree = "<group>"; };
 		C7A037C52B3749330045E1D9 /* life-assistant-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "life-assistant-app-Info.plist"; sourceTree = SOURCE_ROOT; };
 		C7A037C62B374BC70045E1D9 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
+		C7A037C82B377D6C0045E1D9 /* ListDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDesign.swift; sourceTree = "<group>"; };
 		C7B06C932B35DD8A001C9703 /* life_assistant_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = life_assistant_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7B06C982B35DD8A001C9703 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C7B06C9A2B35DD8C001C9703 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				C73155092B37313600D9E0FF /* ApiRequest.swift */,
+				C7A037C82B377D6C0045E1D9 /* ListDesign.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7A037C42B3748530045E1D9 /* LifeAssistantApp.swift in Sources */,
+				C7A037C92B377D6C0045E1D9 /* ListDesign.swift in Sources */,
 				C731550F2B373E4F00D9E0FF /* SignAppleId.swift in Sources */,
 				C73154FE2B37283200D9E0FF /* ShipmentFormView.swift in Sources */,
 				C73154FC2B3709AB00D9E0FF /* ShipmentListView.swift in Sources */,
