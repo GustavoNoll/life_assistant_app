@@ -92,3 +92,9 @@ struct CreateShipmentResponse: Codable {
     let apiRequestStatus: String
 }
 
+struct UpdateStatusShipmentResponse: Codable{
+    let status: String
+    let message: String
+    let apiRequestStatus: String
+}
+

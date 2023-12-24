@@ -76,6 +76,45 @@ class ShipmentModel: ObservableObject {
             }
         }
     }
+    func forceUpdateShipment(shipment: Shipment, completion: @escaping (Bool) -> Void) {
+        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/shipments/update_status") else {
+            completion(false)
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        var shipmentWithUserId = shipment
+        shipmentWithUserId.userId = self.userId
+        do {
+            let jsonData = try JSONEncoder().encode(shipmentWithUserId)
+            request.httpBody = jsonData
+        } catch {
+            print("Erro ao codificar JSON: \(error)")
+            completion(false)
+            return
+        }
+        let apiRequest = ApiRequest()
+        apiRequest.performDataTask(with: request, decodingType: UpdateStatusShipmentResponse.self){ (result: Result<UpdateStatusShipmentResponse, Error>) in
+            switch result {
+            case .success(let responseData):
+                // Lógica para lidar com a conclusão bem-sucedida
+                if (responseData.status == "error"){
+                    completion(false)
+                    print("O SHIPMENT UPDATE STATUS falhou. Erro: \(responseData.message)")
+                    return
+                }
+                print("A solicitação foi bem-sucedida! \(responseData)")
+                self.fetchUserShipments()
+                completion(true)
+            case .failure(let error):
+                // Lógica para lidar com a conclusão mal-sucedida
+                print("O SHIPMENT UPDATE STATUS falhou. Erro: \(error)")
+                completion(false)
+            }
+        }
+
+    }
     
     func deleteShipment(_ shipment: Shipment, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: "\(NetworkConfiguration.baseURL)/shipments?userId=\(userId)&shipmentNumber=\(shipment.shipmentNumber)") else {

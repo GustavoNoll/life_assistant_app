@@ -13,9 +13,9 @@ struct ShipmentFormView: View {
     @State private var errorMessage = ""
     @State private var alertMessage: String?
     @State private var isShowingAlert = false
-    @State private var alertStatus = ""
     @Environment(\.presentationMode) var presentationMode
     @State private var isAddingShipment = false
+    @State private var alertType: AlertType?
     
     init(viewModel: ShipmentModel) {
         self.viewModel = viewModel
@@ -52,18 +52,22 @@ struct ShipmentFormView: View {
                     .disabled(isAddingShipment)
                 }
             }
-        }
-        .alert(isPresented: $isShowingAlert) {
-            Alert(
-                title: Text("Status da Encomenda"),
-                message: Text(alertMessage ?? ""),
-                dismissButton: .default(Text(alertStatus)) {
-                    // Faça algo quando o usuário tocar em "OK", se necessário
-                    presentationMode.wrappedValue.dismiss()
+            .overlay(
+                alertMessage.map { message in
+                    BannerView(message: message, alertType: alertType)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    alertMessage = nil
+                                    if alertType == .success { presentationMode.wrappedValue.dismiss()
+                                    }
+                                }
+                            }
+                        }
                 }
             )
+            
         }
-
         .navigationTitle("Nova Transação")
     }
     private func areFieldsValid() -> Bool {
@@ -77,10 +81,10 @@ struct ShipmentFormView: View {
         viewModel.createShipment(shipment: shipment) { success in
             if success {
                 alertMessage = "Encomenda criada com sucesso!"
-                alertStatus = "OK"
+                alertType = .success
             } else {
                 alertMessage = "Erro ao adicionar encomenda. Tente novamente."
-                alertStatus = "Error"
+                alertType = .error
                 isAddingShipment.toggle()
                 
             }

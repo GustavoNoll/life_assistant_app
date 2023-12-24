@@ -17,10 +17,10 @@ struct TransactionFormView: View {
     @State private var errorMessage = ""
     @State private var alertMessage: String?
     @State private var isShowingAlert = false
-    @State private var alertStatus = ""
     private var numberFormatter: NumberFormatter
     @Environment(\.presentationMode) var presentationMode
     @State private var isAddingShipment = false
+    @State private var alertType: AlertType?
     
     init(viewModel: ViewModel, numberFormatter: NumberFormatter = NumberFormatter()) {
         self.viewModel = viewModel
@@ -70,14 +70,18 @@ struct TransactionFormView: View {
                     .disabled(isAddingShipment)
                 }
             }
-        }
-        .alert(isPresented: $isShowingAlert) {
-            Alert(
-                title: Text("Status da Transação"),
-                message: Text(alertMessage ?? ""),
-                dismissButton: .default(Text(alertStatus)) {
-                    // Faça algo quando o usuário tocar em "OK", se necessário
-                    presentationMode.wrappedValue.dismiss()
+            .overlay(
+                alertMessage.map { message in
+                    BannerView(message: message, alertType: alertType)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    alertMessage = nil
+                                    if alertType == .success { presentationMode.wrappedValue.dismiss()
+                                    }
+                                }
+                            }
+                        }
                 }
             )
         }
@@ -101,10 +105,10 @@ struct TransactionFormView: View {
         viewModel.postTransaction(transaction: transaction) { success in
             if success {
                 alertMessage = "Transação criada com sucesso!"
-                alertStatus = "OK"
+                alertType = .success
             } else {
                 alertMessage = "Erro ao adicionar transação. Tente novamente."
-                alertStatus = "Error"
+                alertType = .error
                 isAddingShipment.toggle()
             }
             isShowingAlert = true

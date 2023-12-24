@@ -8,6 +8,7 @@ extension Double {
 
 
 struct ContentView: View {
+    
     var body: some View {
         NavigationView {
             TabView {
@@ -15,7 +16,6 @@ struct ContentView: View {
                     .tabItem {
                         Label("Home", systemImage: "house")
                     }
-                // Primeira aba
                 BanksView()
                 .tabItem {
                     Label("Bancos", systemImage: "bag.fill")
@@ -29,6 +29,7 @@ struct ContentView: View {
                     Label("Encomendas", systemImage: "shippingbox")
                 }
             }
+            .accentColor(.blue)
         }
     }
 }
@@ -48,6 +49,7 @@ struct HomeView: View {
     private var dateFormatter = DateFormatter()
     @State private var isShowingTransactionForm = false
     @State private var fetchesPerformed = false
+    @State private var backgroundColor = Colors.homeColor
     
 
     init() {
@@ -62,13 +64,13 @@ struct HomeView: View {
         ScrollView {
             ZStack {
                 ZStack {
-                    Color.blue
+                    backgroundColor
                         .ignoresSafeArea()
                     
                     Text("Finanças")
                         .foregroundColor(.white)
                         .font(.largeTitle.bold())
-                        .padding(.top, 16)
+                        .padding(.top, 60)
                         .padding(.bottom, 8)
                 }
             }
@@ -78,7 +80,7 @@ struct HomeView: View {
                 HStack {
                     Text("Balanço do mês")
                         .font(.title2.bold())
-                        .foregroundColor(.blue)
+                        .foregroundColor(Colors.homeColor)
                         .padding(.bottom, 0)
                         .lineLimit(1)
                         .frame(alignment: .center)
@@ -118,24 +120,22 @@ struct HomeView: View {
                         }) {
                             Image(systemName: "plus.circle.fill")
                                 .resizable()
-                                .foregroundColor(.blue)
+                                .foregroundColor(backgroundColor)
                                 .background(Color.white)
                                 .frame(width: 30, height:30)
                                 .cornerRadius(10)
                         }
                         ForEach(viewModel.transactionResponse ?? [], id: \.self){ transaction in
-                            ListDesign(name: transaction.name, value: transaction.value, kind: transaction.kind, backgroundColor: (transaction.income ? .green : .red),
+                            ListDesign(name: transaction.name, value: transaction.value, kind: transaction.kind, backgroundColor: (transaction.income ? Colors.sucessColor : Colors.errorColor),
                                        rightCorner: transaction.timestamp)
                         }
                     }
                 }
+                Spacer()
             }
             
         }
-        .ignoresSafeArea().onAppear{
-            viewModel.fetchAll(month: month, year: year, limit: limit)
-            //remove
-        }
+        .ignoresSafeArea()
         .navigationTitle("")
         .navigationBarHidden(true)
         .onAppear {

@@ -11,13 +11,14 @@ struct ShipmentListView: View {
     @ObservedObject var viewModel: ShipmentModel
     @State private var isShowingShipmentForm = false
     @State private var isShowingErrorAlert = false
+    @State private var backgroundColor = Colors.shipmentColor
 
     var body: some View {
         NavigationView {
             ZStack {
                 VStack {
                     ZStack {
-                        Color.green
+                        backgroundColor
                             .ignoresSafeArea()
                         
                         VStack {
@@ -32,7 +33,7 @@ struct ShipmentListView: View {
                     VStack {
                             List {
                                 ForEach(viewModel.userShipments, id: \.shipmentNumber) { shipment in
-                                    NavigationLink(destination: ShipmentDetailsView(shipment: shipment)) {
+                                    NavigationLink(destination: ShipmentDetailsView(shipment: shipment, viewModel: viewModel)) {
                                         HStack {
                                             VStack(alignment: .leading) {
                                                 Text(shipment.shipmentNumber)
@@ -48,7 +49,8 @@ struct ShipmentListView: View {
                                 }
                                 .onDelete(perform: deleteShipment)
                             }
-                        }                    .onAppear {
+                    }
+                    .onAppear {
                         viewModel.fetchUserShipments()
                     }
                 }
@@ -70,7 +72,7 @@ struct ShipmentListView: View {
                         }) {
                             Image(systemName: "plus.circle.fill")
                                 .resizable()
-                                .foregroundColor(.green)
+                                .foregroundColor(backgroundColor)
                                 .background(Color.white)
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(20)
@@ -101,20 +103,55 @@ struct ShipmentListView: View {
 
 struct ShipmentDetailsView: View {
     let shipment: Shipment
+    let viewModel: ShipmentModel
+    @State private var alertMessage: String?
+    @State private var alertType: AlertType?
 
     var body: some View {
-        List(shipment.details ?? [], id: \.self) { detail in
-            VStack(alignment: .leading) {
-                Text("Data: \(detail.data)")
-                Text("Hora: \(detail.hora)")
-                Text("Local: \(detail.local)")
-                Text("Status: \(detail.status)")
-                ForEach(detail.subStatus, id: \.self) { subStatus in
-                    Text(subStatus)
+        VStack {
+            List(shipment.details ?? [], id: \.self) { detail in
+                VStack(alignment: .leading) {
+                    Text("Data: \(detail.data)")
+                    Text("Hora: \(detail.hora)")
+                    Text("Local: \(detail.local)")
+                    Text("Status: \(detail.status)")
+                    ForEach(detail.subStatus, id: \.self) { subStatus in
+                        Text(subStatus)
+                    }
                 }
             }
+            .listStyle(GroupedListStyle())
+            .refreshable {
+                await updateStatusShipment(shipment: shipment)
+            }
+            .overlay(
+                alertMessage.map { message in
+                    BannerView(message: message, alertType: alertType)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    alertMessage = nil
+                                }
+                            }
+                        }
+                }
+            )
+            .navigationTitle("Detalhes da Encomenda")
         }
-        .navigationTitle("Detalhes da Encomenda")
+    }
+    private func updateStatusShipment(shipment: Shipment) async {
+        viewModel.forceUpdateShipment(shipment: shipment) { success in
+            if success {
+                viewModel.fetchUserShipments()
+                alertMessage = "Atualização bem-sucedida"
+                alertType = .success
+            }
+            else {
+                print("Erro ao atualizar status da encomenda")
+                alertMessage = "Erro ao atualizar status da encomenda"
+                alertType = .error
+            }
+        }
     }
 }
 
