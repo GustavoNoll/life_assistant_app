@@ -8,9 +8,9 @@
 import Foundation
 import SwiftUI
 
-struct Utils {
-    static func formattedDouble(_ value: Double) -> String {
-        return String(format: "%.2f", value)
+extension Double {
+    func formatted() -> String {
+        return String(format: "%.2f", self)
     }
 }
 
@@ -46,6 +46,8 @@ struct BViewanner_Previews: PreviewProvider {
 struct Colors {
     static let shipmentColor = Color(red: 0.87, green: 0.63, blue: 0.87)
     static let homeColor = Color(red: 0.27, green: 0.51, blue: 0.71)
+    static let bankColor = Color(red: 0.65, green: 0.50, blue: 0.41)
+    static let transacationColor = Color(red: 0.56, green: 0.44, blue: 0.58)
     static let sucessColor = Color(red: 0.24, green: 0.70, blue: 0.44)
     static let errorColor = Color(red: 1.00, green: 0.39, blue: 0.28)
 }

@@ -1,30 +1,31 @@
-//
-//  ShipmentFormView.swift
-//  life_assistant_app
-//
-//  Created by Gustavo Noll on 23/12/23.
-//
-
 import SwiftUI
 
-struct ShipmentFormView: View {
-    @ObservedObject var viewModel: ShipmentModel
-    @State private var cod = ""
+struct BankFormView: View {
+    @ObservedObject var viewModel: BankModel
+    @State private var bankName = ""
+    @State private var bankBalance = 0
     @State private var errorMessage = ""
     @State private var alertMessage: String?
     @State private var isShowingAlert = false
     @Environment(\.presentationMode) var presentationMode
-    @State private var isAddingShipment = false
+    @State private var isAddingBank = false
     @State private var alertType: AlertType?
+    private var numberFormatter: NumberFormatter
     
-    init(viewModel: ShipmentModel) {
+    init(viewModel: BankModel) {
         self.viewModel = viewModel
+        self.numberFormatter = NumberFormatter()
+        self.numberFormatter.numberStyle = .currency
+        self.numberFormatter.maximumFractionDigits = 2
     }
+
     var body: some View {
         VStack {
             Form {
-                Section(header: Text("Detalhes da Encomenda")) {
-                    TextField("Código", text: $cod)
+                Section(header: Text("Detalhes do Banco")) {
+                    TextField("Nome do Banco", text: $bankName).disableAutocorrection(true)
+                    CurrencyTextField(numberFormatter: numberFormatter, value: $bankBalance)
+                        .keyboardType(.numberPad)
                 }
                 
                 Section {
@@ -37,19 +38,18 @@ struct ShipmentFormView: View {
                         // Realiza a chamada POST apenas se todos os campos obrigatórios estiverem preenchidos
                         if areFieldsValid() {
                             errorMessage = ""
-                            postShipment()
+                            postBank()
                             withAnimation {
-                                isAddingShipment.toggle()
+                                isAddingBank.toggle()
                             }
                         } else {
                             errorMessage = "Todos os campos são obrigatórios"
                         }
-
                     }) {
-                        Text("Adicionar encomenda")
-                            .foregroundColor(!isAddingShipment ? .blue : Color.gray)
+                        Text("Adicionar Banco")
+                            .foregroundColor(!isAddingBank ? .blue : Color.gray)
                     }
-                    .disabled(isAddingShipment)
+                    .disabled(isAddingBank)
                 }
             }
             .overlay(
@@ -59,7 +59,8 @@ struct ShipmentFormView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 withAnimation {
                                     alertMessage = nil
-                                    if alertType == .success { presentationMode.wrappedValue.dismiss()
+                                    if alertType == .success {
+                                        presentationMode.wrappedValue.dismiss()
                                     }
                                 }
                             }
@@ -68,36 +69,34 @@ struct ShipmentFormView: View {
             )
             
         }
-        .navigationTitle("Nova Transação")
+        .navigationTitle("Novo Banco")
     }
+    
     private func areFieldsValid() -> Bool {
-        return !cod.isEmpty
+        return !bankName.isEmpty && bankBalance > 0
     }
 
-    private func postShipment() {
-        let shipment = Shipment(
-            shipmentNumber: cod
-        )
-        viewModel.createShipment(shipment: shipment) { success in
+    private func postBank() {
+        let bank = BankRequest(_id: "", name: bankName, balance: Double(bankBalance) / 100.0)
+        
+        viewModel.createBank(bank: bank) { success in
             if success {
-                alertMessage = "Encomenda criada com sucesso!"
+                alertMessage = "Banco criado com sucesso!"
                 alertType = .success
             } else {
-                alertMessage = "Erro ao adicionar encomenda. Tente novamente."
+                alertMessage = "Erro ao adicionar banco. Tente novamente."
                 alertType = .error
-                isAddingShipment.toggle()
-                
+                isAddingBank.toggle()
             }
             isShowingAlert = true
         }
     }
-
 }
 
-struct ShipmentFormView_Previews: PreviewProvider {
+struct BankFormView_Previews: PreviewProvider {
     static var previews: some View {
         let userViewModel = AppViewModel()
-        let viewModel = ShipmentModel(appViewModel: userViewModel)
-        ShipmentFormView(viewModel: viewModel)
+        let viewModel = BankModel(appViewModel: userViewModel)
+        BankFormView(viewModel: viewModel)
     }
 }

@@ -57,7 +57,7 @@ struct Shipment: Codable, Hashable {
     let details: [ShipmentDetail]?
     var userId: String?
     
-    init(shipmentNumber: String, _id: String? = nil, details: [ShipmentDetail]? = nil, userId: String? = nil) {
+    init(shipmentNumber: String, _id: String? = nil, details: [ShipmentDetail]? = [], userId: String? = nil) {
         self._id = _id
         self.shipmentNumber = shipmentNumber
         self.details = details

@@ -31,7 +31,7 @@ struct ListDesign: View {
                         .foregroundColor(.white)
                         .font(.headline)
                 }
-                Text("\(value.formatted()) $")
+                Text("\(value.formatted()) \(Locale.current.currencySymbol!)")
                     .foregroundColor(.white)
                     .font(.title3)
             }

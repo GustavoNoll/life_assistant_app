@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct ShipmentListView: View {
-    @ObservedObject var viewModel: ShipmentModel
+    @StateObject var viewModel: ShipmentModel
     @State private var isShowingShipmentForm = false
     @State private var isShowingErrorAlert = false
     @State private var backgroundColor = Colors.shipmentColor
+    @EnvironmentObject var userViewModel: AppViewModel
+
+    
+        
+    init(userViewModel: AppViewModel) {
+        _viewModel = StateObject(wrappedValue: ShipmentModel(appViewModel: userViewModel))
+    }
 
     var body: some View {
         NavigationView {
@@ -61,26 +68,27 @@ struct ShipmentListView: View {
                 .alert(isPresented: $isShowingErrorAlert) {
                                 Alert(title: Text("Erro"), message: Text("Falha ao excluir a encomenda. Tente novamente."), dismissButton: .default(Text("OK")))
                             }
-                
-                // Botão "+" no canto inferior direito
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            isShowingShipmentForm = true
-                        }) {
-                            Image(systemName: "plus.circle.fill")
-                                .resizable()
-                                .foregroundColor(backgroundColor)
-                                .background(Color.white)
-                                .frame(width: 50, height: 50)
-                                .cornerRadius(20)
-                                .padding()
-                        }
-                    }
-                }
             }
+            .overlay(
+                Button(action: {
+                    isShowingShipmentForm = true
+                }) {
+                    Image(systemName: "plus.circle.fill")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .foregroundColor(backgroundColor)
+                        .background(.white)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(backgroundColor, lineWidth: 2) // Ajuste a largura da borda aqui
+                        )
+                        .padding()
+                }
+                .padding(.bottom, 20)
+                .padding(.trailing, 0),
+                alignment: .bottomTrailing
+            )
         }
     }
     private func deleteShipment(at offsets: IndexSet) {
@@ -157,6 +165,7 @@ struct ShipmentDetailsView: View {
 
 struct ShipmentListView_Previews: PreviewProvider {
     static var previews: some View {
-        ShipmentListView(viewModel: ShipmentModel())
+        let userViewModel = AppViewModel()
+        ShipmentListView(userViewModel: userViewModel)
     }
 }

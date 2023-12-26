@@ -13,7 +13,11 @@ class ViewModel: ObservableObject {
     @Published var transactionResponse: [Transaction]?
     @Published var withdrawResponse: WithdrawResponse?
     @Published var userBanks: [UserBank] = []
-    @Published var userId: String = "6584851c1998d9f468e442fc"
+    var appViewModel: AppViewModel
+
+    init(appViewModel: AppViewModel) {
+        self.appViewModel = appViewModel
+    }
     
     func fetchAll(month: Int? = nil, year: Int? = nil, limit: Int? = nil){
         fetchWithdraw(month: month, year: year)
@@ -75,7 +79,7 @@ class ViewModel: ObservableObject {
 
     func fetchUserBanks() {
         
-        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/finances/user_banks?userId=\(self.userId)") else { return }
+        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/finances/user_banks?userId=\(self.appViewModel.userUid ?? "")") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -101,7 +105,7 @@ class ViewModel: ObservableObject {
         task.resume()
     }
     func fetchTransactions(month: Int? = nil, year: Int? = nil, limit: Int? = nil) {
-        var queryString = "user_transactions?userId=\(self.userId)"
+        var queryString = "user_transactions?userId=\(self.appViewModel.userUid ?? "")"
         
         if let month = month, let year = year {
             queryString += "&month=\(month)&year=\(year)"
@@ -119,7 +123,7 @@ class ViewModel: ObservableObject {
     }
 
     func fetchExpenses(month: Int? = nil, year: Int? = nil, limit: Int? = nil) {
-        var queryString = "user_expenses?userId=\(self.userId)"
+        var queryString = "user_expenses?userId=\(self.appViewModel.userUid ?? "")"
         
         if let month = month, let year = year {
             queryString += "&month=\(month)&year=\(year)"
@@ -137,7 +141,7 @@ class ViewModel: ObservableObject {
     }
 
     func fetchIncomes(month: Int? = nil, year: Int? = nil, limit: Int? = nil) {
-        var queryString = "user_incomes?userId=\(self.userId)"
+        var queryString = "user_incomes?userId=\(self.appViewModel.userUid ?? "")"
         
         if let month = month, let year = year {
             queryString += "&month=\(month)&year=\(year)"
@@ -155,7 +159,7 @@ class ViewModel: ObservableObject {
     }
 
     func fetchWithdraw(month: Int? = nil, year: Int? = nil) {
-        var queryString = "user_withdraw?userId=\(self.userId)"
+        var queryString = "user_withdraw?userId=\(self.appViewModel.userUid ?? "")"
         
         if let month = month, let year = year {
             queryString += "&month=\(month)&year=\(year)"

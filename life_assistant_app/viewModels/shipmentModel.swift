@@ -9,12 +9,17 @@ import Foundation
 
 class ShipmentModel: ObservableObject {
     @Published var userShipments: [Shipment] = []
-    @Published var userId: String = "6584851c1998d9f468e442fc"
+    var appViewModel: AppViewModel
+
+    init(appViewModel: AppViewModel) {
+        self.appViewModel = appViewModel
+    }
 
     func fetchUserShipments() {
-        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/shipments?userId=\(self.userId)") else {
+        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/shipments?userId=\(self.appViewModel.userUid ?? "")") else {
             return
         }
+        print("request \(url)")
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -28,6 +33,7 @@ class ShipmentModel: ObservableObject {
 
             do {
                 let shipmentsResponse = try JSONDecoder().decode(UserShipmentsResponse.self, from: data)
+                print(shipmentsResponse)
                 DispatchQueue.main.async {
                     self?.userShipments = shipmentsResponse.userShipments
                 }
@@ -47,7 +53,7 @@ class ShipmentModel: ObservableObject {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         var shipmentWithUserId = shipment
-        shipmentWithUserId.userId = self.userId
+        shipmentWithUserId.userId = self.appViewModel.userUid ?? ""
         do {
             let jsonData = try JSONEncoder().encode(shipmentWithUserId)
             request.httpBody = jsonData
@@ -85,7 +91,7 @@ class ShipmentModel: ObservableObject {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         var shipmentWithUserId = shipment
-        shipmentWithUserId.userId = self.userId
+        shipmentWithUserId.userId = self.appViewModel.userUid ?? ""
         do {
             let jsonData = try JSONEncoder().encode(shipmentWithUserId)
             request.httpBody = jsonData
@@ -117,7 +123,7 @@ class ShipmentModel: ObservableObject {
     }
     
     func deleteShipment(_ shipment: Shipment, completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/shipments?userId=\(userId)&shipmentNumber=\(shipment.shipmentNumber)") else {
+        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/shipments?userId=\(self.appViewModel.userUid ?? "")&shipmentNumber=\(shipment.shipmentNumber)") else {
             completion(false)
             return
         }

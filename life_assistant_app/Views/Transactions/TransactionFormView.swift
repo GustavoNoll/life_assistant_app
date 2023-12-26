@@ -99,7 +99,7 @@ struct TransactionFormView: View {
             income: income,
             kind: kind,
             bankId: viewModel.userBanks[selectedBankIndex]._id, // Use o ID do banco selecionado
-            userId: viewModel.userId,
+            userId: viewModel.appViewModel.userUid ?? "",
             timestamp: ""
         )
         viewModel.postTransaction(transaction: transaction) { success in
