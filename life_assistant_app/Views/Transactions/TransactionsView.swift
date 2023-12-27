@@ -48,8 +48,7 @@ struct TransactionsView: View {
             VStack {
                 FilterView(selectedMonth: $selectedMonth, selectedYear: $selectedYear, selectedDay: $selectedDay,showOnlyIncomes: $showOnlyIncomes, showOnlyExpenses: $showOnlyExpenses, filterByKind: $filterByKind, viewModel: viewModel)
 
-                ChartsView(viewModel: viewModel, selectedMonth: $selectedMonth, selectedYear: $selectedYear, showOnlyIncomes: $showOnlyIncomes, showOnlyExpenses: $showOnlyExpenses, filterByKind: $filterByKind)
-                    .frame(height: 300)
+                ChartsView(viewModel: viewModel, selectedMonth: $selectedMonth, selectedYear: $selectedYear, showOnlyIncomes: $showOnlyIncomes, showOnlyExpenses: $showOnlyExpenses, filterByKind: $filterByKind).frame(height: 300)
                 
                 TransactionsListView(viewModel: viewModel,showOnlyIncomes: $showOnlyIncomes, showOnlyExpenses: $showOnlyExpenses, filterByKind: $filterByKind, alertType: $alertType, alertMessage: $alertMessage)
                 Spacer().frame(height: 100)
@@ -159,10 +158,10 @@ struct ChartsView: View {
     
     // Implemente os gráficos aqui
     var body: some View {
-        if viewModel.transactionResponse?.count ?? 0 > 0 {
+        let transactions = filteredTransactions()
+        if (transactions.contains { $0.income } || transactions.contains { !$0.income }) {
             VStack {
                 TabView(selection: $selectedTab) {
-                    let transactions = filteredTransactions()
                     if (transactions.contains { $0.income }) {
                         TransactionPieChartView(transactions: transactions, income: true)
                             .tag(0)
@@ -170,7 +169,7 @@ struct ChartsView: View {
                       
                     if (transactions.contains { !$0.income }) {
                         TransactionPieChartView(transactions: transactions, income: false)
-                            .tag(0)
+                            .tag(1)
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -201,6 +200,7 @@ struct ChartsView: View {
         if !showOnlyExpenses {
             filteredList.removeAll(where: { $0.income == false })
         }
+        filteredList.removeAll(where: { $0.isPaid == false })
         return filteredList
     }
     

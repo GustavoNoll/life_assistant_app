@@ -19,7 +19,9 @@ struct TransactionResponse: Codable {
 }
 
 struct WithdrawResponse: Codable {
+    let scheduledIncomes: Double
     let incomes: Double
+    let scheduledExpenses: Double
     let expenses: Double
     let withdraw: Double
     let message: String

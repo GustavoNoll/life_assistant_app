@@ -41,7 +41,7 @@ struct HomePageView: View {
             VStack {
                 HStack {
                     Text("Balanço do mês")
-                        .font(.title2.bold())
+                        .font(.title3)
                         .foregroundColor(Colors.homeColor)
                         .padding(.bottom, 0)
                         .lineLimit(1)
@@ -49,30 +49,53 @@ struct HomePageView: View {
                 }
                 Spacer()
                 HStack {
-                    Text("Saldo:")
-                        .font(.headline)
 
                     Text("\((viewModel.withdrawResponse?.withdraw ?? 0).formatted()) \(Locale.current.currencySymbol!)")
-                        .font(.headline)
-                        .fontWeight(.bold)
+                        .font(.title)
                         .foregroundColor(viewModel.withdrawResponse?.withdraw ?? 0 >= 0 ? .green : .red)
                 }
                 .padding(.bottom, 5)
                 HStack {
-                    Text("Despesas:")
-                        .font(.subheadline)
+                    HStack {
+                        Image(systemName: "arrow.down.circle.fill")
+                                           .resizable()
+                                           .scaledToFit()
+                                           .frame(width: 30, height: 30)  // Ajuste o tamanho conforme necessário
+                                           .padding(.leading, 20)
+                                           .foregroundColor(.red)
+                                           .background(.white)
+                        VStack {
+                            Text("\((viewModel.withdrawResponse?.expenses ?? 0).formatted()) \(Locale.current.currencySymbol!)")
+                                .font(.headline)
+                                .foregroundColor(.red)
+                                .padding(.trailing, 20)
+                            Text("\((viewModel.withdrawResponse?.scheduledExpenses ?? 0).formatted()) \(Locale.current.currencySymbol!)")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .padding(.trailing, 20)
 
-                    Text("\((viewModel.withdrawResponse?.expenses ?? 0).formatted()) \(Locale.current.currencySymbol!)")
-                        .font(.headline)
-                        .foregroundColor(.red)
-                        .padding(.trailing, 20)
+                        }
+                        Spacer()
+                    }
+                    Spacer()
+                    HStack {
+                        VStack {
+                            Text("\((viewModel.withdrawResponse?.incomes ?? 0).formatted()) \(Locale.current.currencySymbol!)")
+                                .font(.headline)
+                                .foregroundColor(.green)
+                            Text("\((viewModel.withdrawResponse?.scheduledIncomes ?? 0).formatted()) \(Locale.current.currencySymbol!)")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
 
-                    Text("Receitas:")
-                        .font(.subheadline)
-
-                    Text("\((viewModel.withdrawResponse?.incomes ?? 0).formatted()) \(Locale.current.currencySymbol!)")
-                        .font(.headline)
-                        .foregroundColor(.green)
+                        }
+                        Image(systemName: "arrow.up.circle.fill")
+                           .resizable()
+                           .scaledToFit()
+                           .frame(width: 30, height: 30)  // Ajuste o tamanho conforme necessário
+                           .padding(.trailing, 20)
+                           .foregroundColor(.green)
+                           .background(.white)
+                    }
                 }
                 Spacer()
                 VStack {
@@ -98,11 +121,10 @@ struct HomePageView: View {
                 }
                 Spacer()
             }
-            
         }
         .ignoresSafeArea()
         .navigationTitle("")
-        .navigationBarHidden(true)
+        .navigationBarHidden(false)
         .overlay(
             alertMessage.map { message in
                 BannerView(message: message, alertType: alertType)

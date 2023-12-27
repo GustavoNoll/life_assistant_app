@@ -59,7 +59,7 @@ class ViewModel: ObservableObject {
                     if let index = self.transactionResponse?.firstIndex(where: { $0._id == transaction._id }) {
                         self.transactionResponse?[index].isPaid = true
                     }
-                    //self.fetchAll()
+                    self.fetchWithdraw()
                     completion(true)
                 } catch {
                     print("Erro ao decodificar JSON: \(error)")
@@ -91,6 +91,7 @@ class ViewModel: ObservableObject {
                     print("A solicitação falhou. Erro: \(responseData.message)")
                     return
                 }
+                self.fetchWithdraw()
                 print("A solicitação foi bem-sucedida! \(responseData)")
                 completion(true)
             case .failure(let error):

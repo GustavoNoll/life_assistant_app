@@ -18,7 +18,7 @@ struct TransactionKindRow: View {
         NavigationLink(destination: TransactionDetailListView(kind: kind,transactions: transactions, alertType: $alertType, alertMessage: $alertMessage, viewModel: viewModel)) {
             let total = totalAmountFormatted()
             VStack {
-                ListDesign(name: kind, value: total, backgroundColor: (total >= 0 ? Colors.sucessColor : Colors.errorColor),
+                ListDesign(name: kind, value: total, backgroundColor: (total == 0 ? .gray : (total > 0 ? Colors.sucessColor : Colors.errorColor)),
                            rightCorner: "", isPaid: true)
             }
         }
@@ -26,7 +26,7 @@ struct TransactionKindRow: View {
     
     private func totalAmountFormatted() -> Double {
         let totalAmount = transactions.reduce(0.0) { result, transaction in
-            let value = transaction.income ? transaction.value : -transaction.value
+            let value = transaction.isPaid ? (transaction.income ? transaction.value : -transaction.value) : 0
             return result + (value)
         }
         
