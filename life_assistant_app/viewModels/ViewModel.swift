@@ -20,17 +20,63 @@ class ViewModel: ObservableObject {
     func fetchAll(month: Int? = nil, year: Int? = nil, limit: Int? = nil){
         fetchWithdraw(month: month, year: year)
         fetchTransactions(month: month, year: year, limit: limit)
-        //fetchExpenses(month: month, year: year, limit: limit)
         fetchUserBanks()
-        //fetchIncomes(month: month, year: year, limit: limit)
     }
-    
+    func confirmPay(_ transaction: Transaction, completion: @escaping (Bool) -> Void) {
+        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/finances/transactions/confirm_pay") else {
+            completion(false)
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        do {
+            let jsonData = try JSONEncoder().encode(["transactionId": transaction._id])
+            request.httpBody = jsonData
+        } catch {
+            print("Erro ao codificar dados para JSON: \(error)")
+            completion(false)
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error {
+                print("Erro na solicitação PATCH: \(error)")
+                completion(false)
+                return
+            }
+
+            if let data = data {
+                do {
+                    let decoder = JSONDecoder()
+                    let responseData = try decoder.decode(TransactionResponse.self, from: data)
+                    if responseData.status != "success" {
+                        print("Erro na solicitação PATCH: \(responseData.message)")
+                        completion(false)
+                        return
+                    }
+                    if let index = self.transactionResponse?.firstIndex(where: { $0._id == transaction._id }) {
+                        self.transactionResponse?[index].isPaid = true
+                    }
+                    //self.fetchAll()
+                    completion(true)
+                } catch {
+                    print("Erro ao decodificar JSON: \(error)")
+                    completion(false)
+                }
+            } else {
+                print("Resposta do servidor não contém dados.")
+                completion(false)
+            }
+        }
+        task.resume()
+    }
     func deleteTransaction(_ transaction: Transaction, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: "\(NetworkConfiguration.baseURL)/finances/transactions?transactionId=\(transaction._id)") else {
             completion(false)
             return
         }
-        print(url)
 
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -85,7 +131,7 @@ class ViewModel: ObservableObject {
                 do {
                     let decoder = JSONDecoder()
                     let responseData = try decoder.decode(TransactionResponse.self, from: data)
-                    
+                    print(responseData)
                     if responseData.status != "success" {
                         print("Erro na solicitação POST: \(responseData.message)")
                         completion(false)
@@ -142,7 +188,6 @@ class ViewModel: ObservableObject {
         if let limit = limit {
             queryString += "&limit=\(limit)"
         }
-        
         print("fetch transaction\(queryString)")
         
         fetchData(endpoint: queryString) { [weak self] (response: TransactionsResponse) in

@@ -26,7 +26,6 @@ struct PieChartView: View {
         let sum = values.reduce(0, +)
         var endDeg: Double = 0
         var tempSlices: [PieSliceData] = []
-        
         for (i, value) in values.enumerated() {
             let degrees: Double = value * 360 / sum
             tempSlices.append(PieSliceData(startAngle: Angle(degrees: endDeg), endAngle: Angle(degrees: endDeg + degrees), text: String(format: "%.0f%%", value * 100 / sum), color: self.colors[i]))
@@ -35,7 +34,7 @@ struct PieChartView: View {
         return tempSlices
     }
     
-    public init(values:[Double], names: [String], formatter: @escaping (Double) -> String, colors: [Color] = [Color.blue, Color.green, Color.orange, Color.black, Color.white, Color.yellow, Color.red], backgroundColor: Color = Color.white, foregroundColor: Color = Color.black, widthFraction: CGFloat = 0.75, innerRadiusFraction: CGFloat = 0.70, title: String = "Total"){
+    public init(values:[Double], names: [String], formatter: @escaping (Double) -> String, colors: [Color] = [Color.blue, Color.green, Color.orange, Color.black, Color.brown, Color.yellow, Color.red], backgroundColor: Color = Color.white, foregroundColor: Color = Color.black, widthFraction: CGFloat = 0.75, innerRadiusFraction: CGFloat = 0.70, title: String = "Total"){
         self.values = values
         self.names = names
         self.formatter = formatter

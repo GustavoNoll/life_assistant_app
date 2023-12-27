@@ -37,10 +37,6 @@ struct TransactionPieChartView: View {
 struct PieChartView1_Previews: PreviewProvider {
     static var previews: some View {
         let transactions: [Transaction] = [
-            Transaction(_id: "1", name: "Transaction 1", value: 100.0, income: true, kind: "Salary", bankId: "123", userId: "456", timestamp: "2023-01-01"),
-            Transaction(_id: "3", name: "Transaction 3", value: 75.0, income: true, kind: "Salary", bankId: "123", userId: "456", timestamp: "2023-01-03"),
-            Transaction(_id: "2", name: "Transaction 2", value: 50.0, income: true, kind: "Groceries", bankId: "123", userId: "456", timestamp: "2023-01-02"),
-            Transaction(_id: "4", name: "Transaction 4", value: 30.0, income: true, kind: "Groceries", bankId: "123", userId: "456", timestamp: "2023-01-04"),
             // Adicione outros tipos conforme necessário
         ]
         return TransactionPieChartView(transactions: transactions, income: true)

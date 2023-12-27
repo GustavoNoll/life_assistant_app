@@ -15,7 +15,7 @@ struct TransactionRow: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10.0)
-                .fill(item.transaction.income ? Colors.sucessColor : Colors.errorColor)
+                .fill(item.transaction.isPaid ? (item.transaction.income ? Colors.sucessColor : Colors.errorColor) : .gray)
                 .frame(height: 75)
 
             HStack {
@@ -31,9 +31,12 @@ struct TransactionRow: View {
                 }
             }
             HStack{
-
-                ListDesignTest(name: item.transaction.name, value: item.transaction.value, kind: item.transaction.kind, backgroundColor: (item.transaction.income ? Colors.sucessColor : Colors.errorColor),
-                           rightCorner: "")
+                ListDesignTest(name: item.transaction.name, value: item.transaction.value, scheduled: item.transaction.scheduledDate, backgroundColor: (item.transaction.income ? Colors.sucessColor : Colors.errorColor))
+            }
+        }
+        .onTapGesture {
+            if ( !item.transaction.isPaid) {
+                showPaymentConfirmationAlert()
             }
         }
         .padding(.horizontal)
@@ -47,6 +50,41 @@ struct TransactionRow: View {
             } else {
                 item.offset = value.translation.width
             }
+        }
+    }
+    
+    func showPaymentConfirmationAlert() {
+        let paymentAlertController = UIAlertController(title: "Confirmar Pagamento", message: "Tem certeza de que deseja marcar este item como pago?", preferredStyle: .alert)
+
+        let cancelPaymentAction = UIAlertAction(title: "Cancelar", style: .cancel) { _ in
+            // Resetar isSwiped e offset ao cancelar a ação
+            self.item.isSwiped = false
+            self.item.offset = 0
+        }
+
+        paymentAlertController.addAction(cancelPaymentAction)
+
+        let confirmPaymentAction = UIAlertAction(title: "Confirmar Pagamento", style: .default) { _ in
+            
+            var transactions = self.viewModel.transactionResponse ?? []
+            // Chamar a função no seu ViewModel para confirmar o pagamento
+            self.viewModel.confirmPay(self.item.transaction) { success in
+                if success {
+                    self.alertMessage = "Item pago com sucesso!"
+                    self.alertType = .success
+                } else {
+                    self.item.isSwiped = false
+                    self.item.offset = 0
+                    self.alertMessage = "Erro ao confirmar pagamento!"
+                    self.alertType = .error
+                }
+            }
+        }
+        paymentAlertController.addAction(confirmPaymentAction)
+
+        // Obtém a referência à view controller atual (onde você está chamando a função deleteItem)
+        if let viewController = UIApplication.shared.windows.first?.rootViewController {
+            viewController.present(paymentAlertController, animated: true, completion: nil)
         }
     }
     

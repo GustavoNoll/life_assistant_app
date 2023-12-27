@@ -162,11 +162,16 @@ struct ChartsView: View {
         if viewModel.transactionResponse?.count ?? 0 > 0 {
             VStack {
                 TabView(selection: $selectedTab) {
-                    TransactionPieChartView(transactions: viewModel.transactionResponse ?? [], income: true)
-                        .tag(0)
-
-                    TransactionPieChartView(transactions: viewModel.transactionResponse ?? [], income: false)
-                        .tag(1)
+                    let transactions = filteredTransactions()
+                    if (transactions.contains { $0.income }) {
+                        TransactionPieChartView(transactions: transactions, income: true)
+                            .tag(0)
+                    }
+                      
+                    if (transactions.contains { !$0.income }) {
+                        TransactionPieChartView(transactions: transactions, income: false)
+                            .tag(0)
+                    }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .gesture(DragGesture()
@@ -181,9 +186,32 @@ struct ChartsView: View {
                     }
                 )
                 .padding(.horizontal, 20) 
-                PageControl(numberOfPages: 2, currentPage: $selectedTab)
+                PageControl(numberOfPages: pageCount(), currentPage: $selectedTab)
                                     .padding(.bottom, 10)
             }
+        }
+    }
+    private func filteredTransactions() -> [Transaction] {
+        var filteredList: [Transaction] = viewModel.transactionResponse ?? []
+
+        if !showOnlyIncomes {
+            filteredList.removeAll(where: { $0.income == true })
+        }
+
+        if !showOnlyExpenses {
+            filteredList.removeAll(where: { $0.income == false })
+        }
+        return filteredList
+    }
+    
+    private func pageCount() -> Int {
+        let transactions = filteredTransactions()
+            
+        if transactions.isEmpty {
+            return 0
+        } else {
+            let hasBothIncomesAndExpenses = transactions.contains { $0.income } && transactions.contains { !$0.income }
+            return hasBothIncomesAndExpenses ? 2 : 1
         }
     }
 }

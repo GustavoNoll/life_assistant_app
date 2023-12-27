@@ -16,7 +16,6 @@ struct TransactionsResponse: Codable {
 struct TransactionResponse: Codable {
     let status: String
     let message: String
-    let transaction: Transaction
 }
 
 struct WithdrawResponse: Codable {
@@ -55,6 +54,11 @@ struct Transaction: Hashable, Codable {
     let bankId: String
     let userId: String
     let timestamp: String
+    let isParcel: Bool
+    let currentParcel: Int
+    let parcelId: String?
+    let scheduledDate: String
+    var isPaid: Bool
 }
 
 struct Shipment: Codable, Hashable {

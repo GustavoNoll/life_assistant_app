@@ -21,6 +21,11 @@ struct TransactionFormView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isAddingShipment = false
     @State private var alertType: AlertType?
+    @State private var isParcel = false
+    @State private var currentParcel = 1
+    @State private var isPaid = false
+    @State private var isShowingDatePicker = false
+    @State private var selectedDate = Date()
     
     init(viewModel: ViewModel, numberFormatter: NumberFormatter = NumberFormatter()) {
         self.viewModel = viewModel
@@ -44,6 +49,18 @@ struct TransactionFormView: View {
                     }
                     .id(selectedBankIndex)
                     
+                }
+                Section {
+                    // ... (código existente)
+
+                    // Novos campos no formulário
+                    Toggle("Parcelado", isOn: $isParcel)
+                    if isParcel {
+                        Stepper("Número de Parcelas: \(Int(currentParcel))", value: $currentParcel, in: 1...10)
+                    }
+                    DatePicker("Data Agendada", selection: $selectedDate, displayedComponents: .date)
+                                            .datePickerStyle(.compact)
+                    Toggle("Pago", isOn: $isPaid)
                 }
                 
                 Section {
@@ -89,6 +106,7 @@ struct TransactionFormView: View {
 
         .navigationTitle("Nova Transação")
     }
+
     private func areFieldsValid() -> Bool {
         return !name.isEmpty && (value > 0) && !kind.isEmpty && selectedBankIndex >= 0 && viewModel.userBanks.count > 0
     }
@@ -102,7 +120,12 @@ struct TransactionFormView: View {
             kind: kind,
             bankId: viewModel.userBanks[selectedBankIndex]._id, // Use o ID do banco selecionado
             userId: viewModel.appViewModel.userUid ?? "",
-            timestamp: ""
+            timestamp: "",
+            isParcel: isParcel,
+            currentParcel: currentParcel,
+            parcelId: "",
+            scheduledDate: formattedSelectedDate,
+            isPaid: isPaid
         )
         viewModel.postTransaction(transaction: transaction) { success in
             if success {
@@ -116,4 +139,10 @@ struct TransactionFormView: View {
             isShowingAlert = true
         }
     }
+    private var formattedSelectedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: selectedDate)
+    }
+
 }

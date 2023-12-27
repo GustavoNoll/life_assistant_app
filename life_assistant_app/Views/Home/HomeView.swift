@@ -77,8 +77,8 @@ struct HomePageView: View {
                 Spacer()
                 VStack {
                     Section(header: Text("Últimas Transações").font(.title2)){
-                        ForEach(Dictionary(grouping: viewModel.transactionResponse?.prefix(limit) ?? [], by: { $0.timestamp }).sorted(by: { $0.key > $1.key }), id: \.key) { timestamp, transactions in
-                            Section(header: Text("\(timestamp)")) {
+                        ForEach(Dictionary(grouping: viewModel.transactionResponse?.prefix(limit) ?? [], by: { $0.scheduledDate }).sorted(by: { $0.key > $1.key }), id: \.key) { scheduledDate, transactions in
+                            Section(header: Text("\(scheduledDate)")) {
                                 ForEach(transactions, id: \.self) { transaction in
                                     TransactionRow(item: Item(transaction: transaction, isSwiped: false, offset: 0), viewModel: viewModel, alertType: $alertType, alertMessage: $alertMessage)
                                 }
