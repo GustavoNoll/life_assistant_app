@@ -54,7 +54,7 @@ struct LoginView: View {
     var body: some View {
         NavigationView{
             if viewModel.isSignedIn {
-                BaseView()
+                BaseView(userViewModel: viewModel)
                     .environmentObject(viewModel)
             }
             else {

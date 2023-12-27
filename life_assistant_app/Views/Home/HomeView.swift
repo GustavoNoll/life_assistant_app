@@ -11,14 +11,16 @@ struct HomePageView: View {
     @State private var isShowingTransactionForm = false
     @State private var fetchesPerformed = false
     @State private var backgroundColor = Colors.homeColor
+    @State var alertType: AlertType?
+    @State var alertMessage: String?
     
         
-    init(userViewModel: AppViewModel) {
+    init(viewModel: ViewModel) {
         let currentDate = Date()
         self._month = State(initialValue: Calendar.current.component(.month, from: currentDate))
         self._year = State(initialValue: Calendar.current.component(.year, from: currentDate))
         dateFormatter.dateFormat = "dd/MM/yyyy"
-        _viewModel = StateObject(wrappedValue: ViewModel(appViewModel: userViewModel))
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
     var body: some View {
         ScrollView {
@@ -75,9 +77,12 @@ struct HomePageView: View {
                 Spacer()
                 VStack {
                     Section(header: Text("Últimas Transações").font(.title2)){
-                        ForEach(viewModel.transactionResponse ?? [], id: \.self){ transaction in
-                            ListDesign(name: transaction.name, value: transaction.value, kind: transaction.kind, backgroundColor: (transaction.income ? Colors.sucessColor : Colors.errorColor),
-                                       rightCorner: transaction.timestamp)
+                        ForEach(Dictionary(grouping: viewModel.transactionResponse?.prefix(limit) ?? [], by: { $0.timestamp }).sorted(by: { $0.key > $1.key }), id: \.key) { timestamp, transactions in
+                            Section(header: Text("\(timestamp)")) {
+                                ForEach(transactions, id: \.self) { transaction in
+                                    TransactionRow(item: Item(transaction: transaction, isSwiped: false, offset: 0), viewModel: viewModel, alertType: $alertType, alertMessage: $alertMessage)
+                                }
+                            }
                         }
                         Button(action: {
                             userViewModel.signOut()
@@ -99,6 +104,20 @@ struct HomePageView: View {
         .navigationTitle("")
         .navigationBarHidden(true)
         .overlay(
+            alertMessage.map { message in
+                BannerView(message: message, alertType: alertType)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation {
+                                alertMessage = nil
+                                if alertType == .success {
+                                }
+                            }
+                        }
+                    }
+            }
+        )
+        .overlay(
             Button(action: {
                 isShowingTransactionForm = true
             }) {
@@ -119,7 +138,7 @@ struct HomePageView: View {
             alignment: .bottomTrailing
         )
         .onAppear {
-            viewModel.fetchAll(month: month, year: year, limit: limit)
+            viewModel.fetchAll(month: month, year: year)
         }
         .sheet(isPresented: $isShowingTransactionForm) {
                             TransactionFormView(viewModel: viewModel)
@@ -130,7 +149,8 @@ struct HomePageView: View {
 struct HomePageView_Previews: PreviewProvider {
     static var previews: some View {
         let userViewModel = AppViewModel()
-        HomePageView(userViewModel: userViewModel)
+        let viewModel = ViewModel(appViewModel: userViewModel)
+        HomePageView(viewModel: viewModel)
     }
 }
 

@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ListDesign: View {
-    @State var name: String
-    @State var value: Double
-    @State var kind: String
-    @State var backgroundColor: Color
-    @State var rightCorner: String
+    var name: String
+    var value: Double
+    var kind: String?
+    var backgroundColor: Color
+    var rightCorner: String
     
     var body: some View {
         ZStack(alignment: .leading){
@@ -24,8 +24,10 @@ struct ListDesign: View {
                     Text(name)
                         .foregroundColor(.white)
                         .font(.title.bold())
-                    Text("(\(kind))").foregroundColor(.white)
-                        .font(.headline.bold())
+                    if (kind != nil) {
+                        Text("(\(kind ?? ""))").foregroundColor(.white)
+                            .font(.headline.bold())
+                    }
                     Spacer()
                     Text(rightCorner)
                         .foregroundColor(.white)
@@ -37,6 +39,9 @@ struct ListDesign: View {
             }
             .padding(.horizontal)
         }
+        .onAppear {
+            print(value)
+        }
         .padding(.horizontal)
     }
 }
@@ -44,5 +49,35 @@ struct ListDesign: View {
 struct ListDesignView_Previews: PreviewProvider {
     static var previews: some View {
         ListDesign(name: "John", value: 21.0, kind: "Male", backgroundColor: .red, rightCorner: "22/02/2332")
+    }
+}
+
+struct ListDesignTest: View {
+    @State var name: String
+    @State var value: Double
+    @State var kind: String?
+    @State var backgroundColor: Color
+    @State var rightCorner: String
+    
+    var body: some View {
+        VStack(alignment: .leading){
+            HStack {
+                Text(name)
+                    .foregroundColor(.white)
+                    .font(.title.bold())
+                if (kind != nil) {
+                    Text("(\(kind ?? ""))").foregroundColor(.white)
+                        .font(.headline.bold())
+                }
+                Spacer()
+                Text(rightCorner)
+                    .foregroundColor(.white)
+                    .font(.headline)
+            }
+            Text("\(value.formatted()) \(Locale.current.currencySymbol!)")
+                .foregroundColor(.white)
+                .font(.title3)
+        }
+        .padding(.horizontal)
     }
 }

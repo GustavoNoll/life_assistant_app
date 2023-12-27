@@ -36,18 +36,23 @@ enum TabbedItems: Int, CaseIterable{
 struct BaseView: View {
     @EnvironmentObject var userViewModel: AppViewModel
     @State var selectedTab = 0
+    @StateObject var viewModel: ViewModel
+    
+    init(userViewModel: AppViewModel) {
+        _viewModel = StateObject(wrappedValue: ViewModel(appViewModel: userViewModel))
+    }
 
     var body: some View {
         ZStack(alignment: .bottom){
             TabView(selection: $selectedTab) {
-                HomeView()
+                HomeView(viewModel: viewModel)
                     .tag(0)
                     .toolbarBackground(.hidden, for: .tabBar)
                 
                 BanksView()
                     .tag(1)
                 
-                TransactionsView()
+                TransactionsViewTab(viewModel: viewModel)
                     .tag(2)
                 
                 ShipmentView()
@@ -95,14 +100,14 @@ extension BaseView{
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = AppViewModel()
-        BaseView().environmentObject(viewModel)
+        BaseView(userViewModel: viewModel)
     }
 }
 
 struct HomeView: View {
-    @EnvironmentObject var userViewModel: AppViewModel
+    @StateObject var viewModel: ViewModel
     var body: some View {
-        HomePageView(userViewModel: userViewModel)
+        HomePageView(viewModel: viewModel)
     }
 }
 
@@ -121,9 +126,10 @@ struct BanksView: View {
     }
 }
 
-struct TransactionsView: View {
+struct TransactionsViewTab: View {
+    @StateObject var viewModel: ViewModel
     var body: some View {
-        Text("Conteúdo de Transações")
+        TransactionsView(viewModel: viewModel)
     }
 }
 

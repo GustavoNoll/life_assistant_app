@@ -43,6 +43,12 @@
 		C7EEA0042B3AE63E00CD75EA /* BankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EEA0032B3AE63E00CD75EA /* BankModel.swift */; };
 		C7EEA0092B3AE7EE00CD75EA /* BankListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EEA0082B3AE7EE00CD75EA /* BankListView.swift */; };
 		C7EEA00D2B3AEF3200CD75EA /* BankFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EEA00C2B3AEF3200CD75EA /* BankFormView.swift */; };
+		C7EEA00F2B3B0C5D00CD75EA /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EEA00E2B3B0C5D00CD75EA /* TransactionsView.swift */; };
+		C7EEA0132B3B401E00CD75EA /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EEA0122B3B401E00CD75EA /* TransactionRow.swift */; };
+		C7EEA0172B3B405900CD75EA /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EEA0162B3B405900CD75EA /* TransactionListView.swift */; };
+		C7EEA01C2B3B7F6100CD75EA /* TransactionCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EEA01B2B3B7F6100CD75EA /* TransactionCharts.swift */; };
+		C7EEA01F2B3B88C400CD75EA /* SwiftPieChart in Frameworks */ = {isa = PBXBuildFile; productRef = C7EEA01E2B3B88C400CD75EA /* SwiftPieChart */; };
+		C7EEA0212B3B8A5C00CD75EA /* PieChartAdaptation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EEA0202B3B8A5C00CD75EA /* PieChartAdaptation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +99,11 @@
 		C7EEA0032B3AE63E00CD75EA /* BankModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankModel.swift; sourceTree = "<group>"; };
 		C7EEA0082B3AE7EE00CD75EA /* BankListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankListView.swift; sourceTree = "<group>"; };
 		C7EEA00C2B3AEF3200CD75EA /* BankFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankFormView.swift; sourceTree = "<group>"; };
+		C7EEA00E2B3B0C5D00CD75EA /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
+		C7EEA0122B3B401E00CD75EA /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
+		C7EEA0162B3B405900CD75EA /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
+		C7EEA01B2B3B7F6100CD75EA /* TransactionCharts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCharts.swift; sourceTree = "<group>"; };
+		C7EEA0202B3B8A5C00CD75EA /* PieChartAdaptation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartAdaptation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +113,7 @@
 			files = (
 				C7EE9FE82B39F8A800CD75EA /* GoogleSignIn in Frameworks */,
 				C7EE9FF52B3A009100CD75EA /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				C7EEA01F2B3B88C400CD75EA /* SwiftPieChart in Frameworks */,
 				C7EE9FEA2B39F8A800CD75EA /* GoogleSignInSwift in Frameworks */,
 				C7EE9FEF2B3A009100CD75EA /* FirebaseAnalytics in Frameworks */,
 				C7EE9FF72B3A009100CD75EA /* FirebaseAppCheck in Frameworks */,
@@ -172,6 +184,10 @@
 			isa = PBXGroup;
 			children = (
 				C73154F32B36FB8100D9E0FF /* TransactionFormView.swift */,
+				C7EEA00E2B3B0C5D00CD75EA /* TransactionsView.swift */,
+				C7EEA0122B3B401E00CD75EA /* TransactionRow.swift */,
+				C7EEA0162B3B405900CD75EA /* TransactionListView.swift */,
+				C7EEA01B2B3B7F6100CD75EA /* TransactionCharts.swift */,
 			);
 			path = Transactions;
 			sourceTree = "<group>";
@@ -181,6 +197,7 @@
 			children = (
 				C73155092B37313600D9E0FF /* ApiRequest.swift */,
 				C7A037C82B377D6C0045E1D9 /* ListDesign.swift */,
+				C7EEA0202B3B8A5C00CD75EA /* PieChartAdaptation.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -301,6 +318,7 @@
 				C7EE9FF42B3A009100CD75EA /* FirebaseAnalyticsWithoutAdIdSupport */,
 				C7EE9FF62B3A009100CD75EA /* FirebaseAppCheck */,
 				C7EEA0012B3A095700CD75EA /* FirebaseAuth */,
+				C7EEA01E2B3B88C400CD75EA /* SwiftPieChart */,
 			);
 			productName = life_assistant_app;
 			productReference = C7B06C932B35DD8A001C9703 /* life_assistant_app.app */;
@@ -377,6 +395,7 @@
 			packageReferences = (
 				C7EE9FE62B39F8A800CD75EA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				C7EE9FED2B3A009100CD75EA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				C7EEA01D2B3B88C400CD75EA /* XCRemoteSwiftPackageReference "SwiftPieChart" */,
 			);
 			productRefGroup = C7B06C942B35DD8A001C9703 /* Products */;
 			projectDirPath = "";
@@ -424,11 +443,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7EEA0212B3B8A5C00CD75EA /* PieChartAdaptation.swift in Sources */,
 				C7A037C42B3748530045E1D9 /* LifeAssistantApp.swift in Sources */,
 				C7A037C92B377D6C0045E1D9 /* ListDesign.swift in Sources */,
 				C7EE9FEC2B39FCD700CD75EA /* BaseView.swift in Sources */,
 				C73154FE2B37283200D9E0FF /* ShipmentFormView.swift in Sources */,
 				C7EEA0092B3AE7EE00CD75EA /* BankListView.swift in Sources */,
+				C7EEA00F2B3B0C5D00CD75EA /* TransactionsView.swift in Sources */,
 				C73154FC2B3709AB00D9E0FF /* ShipmentListView.swift in Sources */,
 				C7CECE752B39E34E0028EA22 /* HomeView.swift in Sources */,
 				C731550A2B37313600D9E0FF /* ApiRequest.swift in Sources */,
@@ -441,7 +462,10 @@
 				C7A037C72B374BC70045E1D9 /* NetworkConfiguration.swift in Sources */,
 				C7CECE772B39EA660028EA22 /* ShipmentModel.swift in Sources */,
 				C7EEA0042B3AE63E00CD75EA /* BankModel.swift in Sources */,
+				C7EEA0132B3B401E00CD75EA /* TransactionRow.swift in Sources */,
+				C7EEA0172B3B405900CD75EA /* TransactionListView.swift in Sources */,
 				C731550D2B373DE300D9E0FF /* LoginView.swift in Sources */,
+				C7EEA01C2B3B7F6100CD75EA /* TransactionCharts.swift in Sources */,
 				C73154F82B36FC1100D9E0FF /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -806,6 +830,14 @@
 				minimumVersion = 10.19.1;
 			};
 		};
+		C7EEA01D2B3B88C400CD75EA /* XCRemoteSwiftPackageReference "SwiftPieChart" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ilamanov/SwiftPieChart";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.61;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -848,6 +880,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C7EE9FED2B3A009100CD75EA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		C7EEA01E2B3B88C400CD75EA /* SwiftPieChart */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7EEA01D2B3B88C400CD75EA /* XCRemoteSwiftPackageReference "SwiftPieChart" */;
+			productName = SwiftPieChart;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

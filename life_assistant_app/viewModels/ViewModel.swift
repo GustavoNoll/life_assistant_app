@@ -8,8 +8,6 @@
 import Foundation
 
 class ViewModel: ObservableObject {
-    @Published var expenseResponse: [Transaction]?
-    @Published var incomeResponse: [Transaction]?
     @Published var transactionResponse: [Transaction]?
     @Published var withdrawResponse: WithdrawResponse?
     @Published var userBanks: [UserBank] = []
@@ -25,6 +23,36 @@ class ViewModel: ObservableObject {
         //fetchExpenses(month: month, year: year, limit: limit)
         fetchUserBanks()
         //fetchIncomes(month: month, year: year, limit: limit)
+    }
+    
+    func deleteTransaction(_ transaction: Transaction, completion: @escaping (Bool) -> Void) {
+        guard let url = URL(string: "\(NetworkConfiguration.baseURL)/finances/transactions?transactionId=\(transaction._id)") else {
+            completion(false)
+            return
+        }
+        print(url)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let apiRequest = ApiRequest()
+        apiRequest.performDataTask(with: request, decodingType: deleteResponse.self){ (result: Result<deleteResponse, Error>) in
+            switch result {
+            case .success(let responseData):
+                // Lógica para lidar com a conclusão bem-sucedida
+                if (responseData.status == "error"){
+                    completion(false)
+                    print("A solicitação falhou. Erro: \(responseData.message)")
+                    return
+                }
+                print("A solicitação foi bem-sucedida! \(responseData)")
+                completion(true)
+            case .failure(let error):
+                // Lógica para lidar com a conclusão mal-sucedida
+                print("A solicitação falhou. Erro: \(error)")
+                completion(false)
+            }
+        }
     }
     
     func postTransaction(transaction: Transaction, completion: @escaping (Bool) -> Void) {
@@ -115,6 +143,8 @@ class ViewModel: ObservableObject {
             queryString += "&limit=\(limit)"
         }
         
+        print("fetch transaction\(queryString)")
+        
         fetchData(endpoint: queryString) { [weak self] (response: TransactionsResponse) in
             DispatchQueue.main.async {
                 self?.transactionResponse = response.transactions
@@ -122,41 +152,6 @@ class ViewModel: ObservableObject {
         }
     }
 
-    func fetchExpenses(month: Int? = nil, year: Int? = nil, limit: Int? = nil) {
-        var queryString = "user_expenses?userId=\(self.appViewModel.userUid ?? "")"
-        
-        if let month = month, let year = year {
-            queryString += "&month=\(month)&year=\(year)"
-        }
-        
-        if let limit = limit {
-            queryString += "&limit=\(limit)"
-        }
-        
-        fetchData(endpoint: queryString) { [weak self] (response: TransactionsResponse) in
-            DispatchQueue.main.async {
-                self?.expenseResponse = response.transactions
-            }
-        }
-    }
-
-    func fetchIncomes(month: Int? = nil, year: Int? = nil, limit: Int? = nil) {
-        var queryString = "user_incomes?userId=\(self.appViewModel.userUid ?? "")"
-        
-        if let month = month, let year = year {
-            queryString += "&month=\(month)&year=\(year)"
-        }
-        
-        if let limit = limit {
-            queryString += "&limit=\(limit)"
-        }
-        
-        fetchData(endpoint: queryString) { [weak self] (response: TransactionsResponse) in
-            DispatchQueue.main.async {
-                self?.incomeResponse = response.transactions
-            }
-        }
-    }
 
     func fetchWithdraw(month: Int? = nil, year: Int? = nil) {
         var queryString = "user_withdraw?userId=\(self.appViewModel.userUid ?? "")"

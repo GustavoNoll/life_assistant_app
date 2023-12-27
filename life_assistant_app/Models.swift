@@ -36,12 +36,18 @@ struct UserBank: Codable, Hashable {
     let userId: String
     let __v: Int?
 }
+struct Item: Codable {
+    let transaction: Transaction
+    var isSwiped: Bool
+    var offset:  CGFloat
+}
 
 struct UserBanksResponse: Codable {
     let message: String
     let banks: [UserBank]
 }
 struct Transaction: Hashable, Codable {
+    let _id: String
     let name: String
     let value: Double
     let income: Bool
@@ -67,7 +73,7 @@ struct Shipment: Codable, Hashable {
     
 }
 
-struct deleteResponse: Codable {
+struct deleteResponse: Codable, Hashable {
     let status: String
     let message: String
 }

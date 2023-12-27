@@ -77,7 +77,8 @@ struct TransactionFormView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 withAnimation {
                                     alertMessage = nil
-                                    if alertType == .success { presentationMode.wrappedValue.dismiss()
+                                    if alertType == .success { 
+                                        presentationMode.wrappedValue.dismiss()
                                     }
                                 }
                             }
@@ -94,6 +95,7 @@ struct TransactionFormView: View {
 
     private func postTransaction() {
         let transaction = Transaction(
+            _id: "dont used",
             name: name,
             value: Double(value) / 100.0,
             income: income,

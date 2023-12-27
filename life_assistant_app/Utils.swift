@@ -10,7 +10,13 @@ import SwiftUI
 
 extension Double {
     func formatted() -> String {
-        return String(format: "%.2f", self)
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.decimalSeparator = ","
+
+        return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
     }
 }
 
@@ -50,4 +56,27 @@ struct Colors {
     static let transacationColor = Color(red: 0.56, green: 0.44, blue: 0.58)
     static let sucessColor = Color(red: 0.24, green: 0.70, blue: 0.44)
     static let errorColor = Color(red: 1.00, green: 0.39, blue: 0.28)
+}
+
+struct ToggleButton: View {
+    var title: String
+    @Binding var isOn: Bool
+    var color: Color
+
+    var body: some View {
+        Button(action: {
+            isOn.toggle()
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(color)
+                    .opacity(isOn ? 1.0 : 0.5)
+                Text(title)
+                    .foregroundColor(.white)
+                    .font(.headline)
+            }
+            .frame(height: 40)
+            .padding(.vertical, 4)
+        }
+    }
 }
