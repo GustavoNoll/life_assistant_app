@@ -124,7 +124,7 @@ struct HomePageView: View {
         }
         .ignoresSafeArea()
         .navigationTitle("")
-        .navigationBarHidden(false)
+        .navigationBarHidden(true)
         .overlay(
             alertMessage.map { message in
                 BannerView(message: message, alertType: alertType)

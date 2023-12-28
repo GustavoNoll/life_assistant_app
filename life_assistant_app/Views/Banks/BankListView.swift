@@ -30,10 +30,10 @@ struct BankListView: View {
                             Text("Bancos")
                                 .foregroundColor(.white)
                                 .font(.largeTitle.bold())
-                                .padding(.top, 16)
+                                .padding(.top, 5)
                                 .padding(.bottom, 8)
                         }
-                    }.frame(height: 200)
+                    }.frame(height: 190)
                     VStack {
                         List {
                             ForEach(viewModel.userBanks, id: \._id) { bank in
@@ -83,7 +83,19 @@ struct BankListView: View {
         }
     }
 
-    private func deleteBank(at offsets: IndexSet) {}
+    private func deleteBank(at offsets: IndexSet) {
+        for index in offsets {
+            let bank = viewModel.userBanks[index]
+            viewModel.deleteBank(bank: bank) { success in
+                if success {
+                    viewModel.userBanks.remove(at: index)
+                } else {
+                    print("Erro ao excluir o banco")
+                    isShowingErrorAlert = true
+                }
+            }
+        }
+    }
 }
 
 struct BankRowView: View {

@@ -76,6 +76,9 @@ class BankModel: ObservableObject {
         }
         task.resume()
     }
+    func deleteBank(bank: BankResponse, completion: @escaping (Bool) -> Void) {
+        completion(false)
+    }
 
     func createBank(bank: BankRequest, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: "\(NetworkConfiguration.baseURL)/finances/banks") else {

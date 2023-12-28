@@ -32,10 +32,9 @@ struct ShipmentListView: View {
                             Text("Encomendas")
                                 .foregroundColor(.white)
                                 .font(.largeTitle.bold())
-                                .padding(.top, 16)
-                                .padding(.bottom, 8)
-                        }
-                    }.frame(height: 200)
+                                .padding(.top, 5)
+                                .padding(.bottom, 8)                        }
+                    }.frame(height: 190)
                     
                     VStack {
                             List {

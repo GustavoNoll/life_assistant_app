@@ -54,7 +54,6 @@ struct TransactionsView: View {
                 Spacer().frame(height: 100)
             }
             .navigationBarTitle("Transações")
-
         }.ignoresSafeArea()
             .overlay(
                 alertMessage.map { message in
@@ -70,6 +69,34 @@ struct TransactionsView: View {
                         }
                 }
             )
+            .overlay {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            isShowingTransactionForm = true
+                        }) {
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(backgroundColor)
+                                .background(.white)
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(backgroundColor, lineWidth: 2) // Ajuste a largura da borda aqui
+                                )
+                        }
+                        .padding()
+                        .padding(.bottom, 20)
+                        .padding(.trailing, 0)
+                    }
+                }
+            }
+            .sheet(isPresented: $isShowingTransactionForm) {
+                                TransactionFormView(viewModel: viewModel)
+            }
     }
 }
 
